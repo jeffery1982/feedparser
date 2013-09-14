@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DBHelper {
-	// 定义要使用的变量
+	
     private static Connection conn = null;
     private static PreparedStatement ps = null;
     private static ResultSet rs = null;
@@ -34,10 +34,10 @@ public class DBHelper {
         return cs;
     }
 
-    // 加载驱动，只需要一次
+    
     static {
         try {
-            // 从配置文件dbinfo.properties中读取配置信息
+            // Read from dbinfo.properties
             pp = new Properties();
             fis = new FileInputStream("dbinfo.properties");
             pp.load(fis);
@@ -61,7 +61,10 @@ public class DBHelper {
         }
     }
 
-    // 得到连接
+    /**
+     * Get connection
+     * @return
+     */
     public static Connection getConnection() {
         try {
             conn = DriverManager.getConnection(url, userName, password);
@@ -71,13 +74,15 @@ public class DBHelper {
         return conn;
     }
 
-    // 处理多个update/delete/insert
+    /**
+     * Execute sql statements
+     * @param sql
+     * @param parameters
+     */
     public static void executeUpdateMultiParams(String[] sql,
             String[][] parameters) {
         try {
-            // 获得连接
             conn = getConnection();
-            // 可能传多条sql语句
             conn.setAutoCommit(false);
             for (int i = 0; i < sql.length; i++) {
                 if (parameters[i] != null) {
@@ -102,8 +107,12 @@ public class DBHelper {
         }
     }
 
-    // update/delete/insert
-    // sql格式:UPDATE tablename SET columnn = ? WHERE column = ?
+    /**
+     * update/delete/insert
+     * sql format:UPDATE tablename SET columnn = ? WHERE column = ?
+     * @param sql
+     * @param parameters
+     */
     public static void executeUpdate(String sql, String[] parameters) {
         try {
             // 1.创建一个ps
@@ -125,7 +134,12 @@ public class DBHelper {
         }
     }
 
-    // select
+    /**
+     * Select
+     * @param sql
+     * @param parameters
+     * @return
+     */
     public static ResultSet executeQuery(String sql, String[] parameters) {
         ResultSet rs = null;
         try {
@@ -146,8 +160,12 @@ public class DBHelper {
         return rs;
     }
 
-    // 调用无返回值存储过程
-    // 格式： call procedureName(parameters list)
+    /**
+     * Call sp
+     * format: call procedureName(parameters list)
+     * @param sql
+     * @param parameters
+     */
     public static void callProc(String sql, String[] parameters) {
         try {
             conn = getConnection();
@@ -167,7 +185,12 @@ public class DBHelper {
         }
     }
 
-    // 调用带有输入参数且有返回值的存储过程
+    /**
+     * Call sp with "in parameters"
+     * @param sql
+     * @param inparameters
+     * @return
+     */
     public static CallableStatement callProcInput(String sql, String[] inparameters) {
         try {
             conn = getConnection();
@@ -186,7 +209,12 @@ public class DBHelper {
         return cs;
     }
    
-    // 调用有返回值的存储过程
+    /**
+     * Call sp with "out parameters"
+     * @param sql
+     * @param outparameters
+     * @return
+     */
     public static CallableStatement callProcOutput(String sql,Integer[] outparameters) {
         try {
             conn = getConnection();
@@ -206,6 +234,12 @@ public class DBHelper {
         return cs;
     }
 
+    /**
+     * Close resultset
+     * @param rs
+     * @param ps
+     * @param conn
+     */
     public static void close(ResultSet rs, Statement ps, Connection conn) {
         if (rs != null)
             try {
