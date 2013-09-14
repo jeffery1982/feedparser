@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,6 +26,11 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 
+/**
+ * FeedParser to download and import feed to database
+ * @author Jeffery
+ *
+ */
 public class FeedParser {
 	
 	/**
@@ -35,7 +41,12 @@ public class FeedParser {
 		try {
 			List<String> feedUrlList = Utils.getFeedList(feedListFilePath);
 			for (String feedUrl : feedUrlList) {
-				FeedParser.downloadFeedAndAnalyze(feedUrl);
+				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feedUrl);
+				for (FeedInfo feedInfo : feedInfoList) {
+					String sql = "INSERT INTO feedinfo (title,description) VALUES (?,?)";
+			        String[] parameters = { feedInfo.getTitle(), feedInfo.getDescription() };
+			        DBHelper.executeUpdate(sql, parameters);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -64,7 +75,8 @@ public class FeedParser {
         in.close();
 	}
 	
-	public static void downloadFeedAndAnalyze(String urlString) throws Exception {
+	public static List<FeedInfo> downloadFeedAndAnalyze(String urlString) throws Exception {
+		List<FeedInfo> feedInfoList = new Vector<FeedInfo>();
 		URL url = new URL(urlString);
 		XmlReader reader = null;
 		try {
@@ -72,13 +84,16 @@ public class FeedParser {
 			SyndFeed feed = new SyndFeedInput().build(reader);
 			for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 				SyndEntry entry = (SyndEntry) i.next();
-				System.out.println(entry.getTitle());
+				FeedInfo feedInfo = new FeedInfo();
+				feedInfo.setTitle(entry.getTitle());
+				feedInfo.setDescription(entry.getDescription().getValue());
 			} 
 		} finally {
 			if (reader !=null) {
 				reader.close();
 			}
 		}
+		return feedInfoList;
 	}
 	
 	public static void executeFeedFromFile(String filePath) throws Exception {
