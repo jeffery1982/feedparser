@@ -37,11 +37,16 @@ public class FeedParser {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String feedListFilePath = "./testdata/271feed.txt";
+		String feedListFilePath = "./testdata/271feeds.txt";
 		try {
-			List<String> feedUrlList = Utils.getFeedList(feedListFilePath);
-			for (String feedUrl : feedUrlList) {
-				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feedUrl);
+			//List<String> feedUrlList = Utils.getFeedList(feedListFilePath);
+			FeedInfo[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
+			for (FeedInfo feed : feedList) {
+				System.out.println("Download uri: " + feed.getUri());
+				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feed.getUri());
+				if (feedInfoList!=null) {
+					System.out.println("feedInfoList size: " + feedInfoList.size());
+				}
 				for (FeedInfo feedInfo : feedInfoList) {
 					String sql = "INSERT INTO feedinfo (title,description) VALUES (?,?)";
 			        String[] parameters = { feedInfo.getTitle(), feedInfo.getDescription() };
@@ -85,8 +90,13 @@ public class FeedParser {
 			for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 				SyndEntry entry = (SyndEntry) i.next();
 				FeedInfo feedInfo = new FeedInfo();
-				feedInfo.setTitle(entry.getTitle());
-				feedInfo.setDescription(entry.getDescription().getValue());
+				if (entry.getTitle() != null) {
+					feedInfo.setTitle(entry.getTitle());
+				}
+				if (entry.getDescription() != null) {
+					feedInfo.setDescription(entry.getDescription().getValue());
+				}
+				feedInfoList.add(feedInfo);
 			} 
 		} finally {
 			if (reader !=null) {

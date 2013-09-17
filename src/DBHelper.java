@@ -3,6 +3,11 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * DB Helper for MySql
+ * @author Jeffery
+ *
+ */
 public class DBHelper {
 	
     private static Connection conn = null;
@@ -102,7 +107,6 @@ public class DBHelper {
             }
             throw new RuntimeException(e.getMessage());
         } finally {
-            // 关闭资源
             close(rs, ps, conn);
         }
     }
@@ -115,21 +119,17 @@ public class DBHelper {
      */
     public static void executeUpdate(String sql, String[] parameters) {
         try {
-            // 1.创建一个ps
             conn = getConnection();
             ps = conn.prepareStatement(sql);
-            // 给？赋值
             if (parameters != null)
                 for (int i = 0; i < parameters.length; i++) {
                     ps.setString(i + 1, parameters[i]);
                 }
-            // 执行
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();// 开发阶段
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         } finally {
-            // 关闭资源
             close(rs, ps, conn);
         }
     }
@@ -170,7 +170,6 @@ public class DBHelper {
         try {
             conn = getConnection();
             cs = conn.prepareCall(sql);
-            // 给？赋值
             if (parameters != null) {
                 for (int i = 0; i < parameters.length; i++)
                     cs.setObject(i + 1, parameters[i]);
@@ -180,7 +179,6 @@ public class DBHelper {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         } finally {
-            // 关闭资源
             close(rs, cs, conn);
         }
     }
@@ -218,8 +216,7 @@ public class DBHelper {
     public static CallableStatement callProcOutput(String sql,Integer[] outparameters) {
         try {
             conn = getConnection();
-            cs = conn.prepareCall(sql);                   
-            //给out参数赋值
+            cs = conn.prepareCall(sql);
             if(outparameters!=null)
                 for(int i=0;i<outparameters.length;i++)
                     cs.registerOutParameter(i+1, outparameters[i]);
