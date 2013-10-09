@@ -30,13 +30,13 @@ public class Utils {
 		return feedUrlList;
 	}
 	
-	public static FeedInfo[] getFeedListByObjectType(String filePath) throws JsonParseException, IOException {
-		FeedInfo[] arr = null;
+	public static FeedSource[] getFeedListByObjectType(String filePath) throws JsonParseException, IOException {
+		FeedSource[] arr = null;
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			arr = objectMapper.readValue(new File(filePath),
-					FeedInfo[].class);
+					FeedSource[].class);
 			System.out.println(arr.length);
 //			for (int i = 0; i < arr.length; i++) {
 //				System.out.println(arr[i]);

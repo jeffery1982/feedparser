@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -39,12 +40,11 @@ public class FeedParser {
 	public static void main(String[] args) {
 		String feedListFilePath = "./testdata/271feeds.txt";
 		try {
-			//List<String> feedUrlList = Utils.getFeedList(feedListFilePath);
-			FeedInfo[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
-			for (FeedInfo feed : feedList) {
+			FeedSource[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
+			for (FeedSource feed : feedList) {
 				System.out.println("Download uri: " + feed.getUri());
 				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feed.getUri());
-				if (feedInfoList!=null) {
+				if (feedInfoList != null) {
 					System.out.println("feedInfoList size: " + feedInfoList.size());
 				}
 				for (FeedInfo feedInfo : feedInfoList) {
@@ -56,6 +56,11 @@ public class FeedParser {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+	}
+	
+	public void updateFeedSource(String feedListFilePath) throws JsonParseException, IOException {
+		FeedSource[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
+		
 	}
 	
 	public void downloadContent(String url, String filePath) throws Exception {
@@ -95,6 +100,18 @@ public class FeedParser {
 				}
 				if (entry.getDescription() != null) {
 					feedInfo.setDescription(entry.getDescription().getValue());
+				}
+				if (entry.getAuthor()!=null) {
+					//TODO
+				}
+				if (entry.getLink()!=null) {
+					//TODO
+				}
+				if (entry.getPublishedDate()!=null) {
+					//TODO
+				}
+				if (entry.getUri()!=null) {
+					//TODO
 				}
 				feedInfoList.add(feedInfo);
 			} 

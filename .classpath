@@ -9,5 +9,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/MySql"/>
 	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/jackson-databind-2.2.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/jackson-annotations-2.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/elasticsearch-0.90.5/elasticsearch-0.90.5/lib/elasticsearch-0.90.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/jest-0.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
