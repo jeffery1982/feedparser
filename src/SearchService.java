@@ -5,6 +5,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
+import io.searchbox.indices.IndicesExists;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,25 +15,22 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 
 public class SearchService {
-	private static JestClient jestClient = InitES.jestClient();
-
-    /**
-     * 创建es news索引
+    String indexName = "feed";
+	/**
+     * Create es feedinfo
      */
-    public void builderSearchIndex() {
-        int num = 10000;
+    public void builderSearchIndex(JestClient jestClient) {
+        int num = 10;
         long start = System.currentTimeMillis();
         try {
-            // 如果索引存在,删除索引
-            DeleteIndex deleteIndex = new DeleteIndex("news");
+        	IndicesExists indicesExists = new IndicesExists(indexName);
+            DeleteIndex deleteIndex = new DeleteIndex(indexName);
             jestClient.execute(deleteIndex);
 
-            // 创建索引
-            CreateIndex createIndex = new CreateIndex("news");
+            CreateIndex createIndex = new CreateIndex(indexName);
             jestClient.execute(createIndex);
             // Bulk 两个参数1:索引名称2:类型名称(用文章(article)做类型名称)
-            Bulk bulk = new Bulk("news", "article");
-            // 添加添加100万条假数据去服务端(ES)
+            Bulk bulk = new Bulk(indexName, indexName);
             for (int i = 0; i < num; i++) {
                 FeedInfo news = new FeedInfo();
                 news.setId(String.valueOf(i + 1));
@@ -55,13 +53,13 @@ public class SearchService {
      * @param param
      * @return
      */
-    public List searchsNews(String param) {
+    public List searchsNews(JestClient jestClient, String param) {
         try {
             long start = System.currentTimeMillis();
             QueryBuilder queryBuilder = QueryBuilders.queryString(param);
             Search search = new Search(Search.createQueryWithBuilder(queryBuilder.toString()));
-            search.addIndex("news");
-            search.addType("article");
+            search.addIndex(indexName);
+            search.addType(indexName);
             JestResult result = jestClient.execute(search);
             long end = System.currentTimeMillis();
             System.out.println("在100万条记录中,搜索新闻,共用时间 -->> " + (end - start) + " 毫秒");

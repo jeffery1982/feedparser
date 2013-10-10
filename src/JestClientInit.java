@@ -4,10 +4,11 @@ import io.searchbox.client.config.ClientConfig;
 import io.searchbox.client.config.ClientConstants;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 
-public class InitES {
-	private static JestClient JestClient;
+public class JestClientInit {
+	private static JestClient jestClient;
 
     /**
      * 配置jest客户端,到时使用spring时,可以用配置方式 ,现在暂时使用new ...
@@ -15,11 +16,9 @@ public class InitES {
      * @return
      */
     private static ClientConfig clientConfig() {
-        // es的服务端地址,暂时我是用我虚拟机的(ubuntu)做服务器
-        String connectionUrl = "http://192.168.56.101:9200";// 一般都是9200端口
+        String connectionUrl = "http://localhost:9200";
         ClientConfig clientConfig = new ClientConfig();
-        // 当你用集群时,就有可能会有多个es的服务端,这里我暂时没有集群
-        LinkedHashSet servers = new LinkedHashSet();
+        Set<String> servers = new LinkedHashSet<String>();
         servers.add(connectionUrl);
         clientConfig.getServerProperties().put(ClientConstants.SERVER_LIST, servers);
         clientConfig.getClientFeatures().put(ClientConstants.IS_MULTI_THREADED, false);
@@ -34,9 +33,15 @@ public class InitES {
     public static JestClient jestClient() {
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(clientConfig());
-        if (JestClient != null) {
-            JestClient = factory.getObject();
+        if (jestClient != null) {
+        	jestClient = factory.getObject();
         }
-        return JestClient;
+        return jestClient;
     }
+    
+    public void closeJestClient(){  
+        if(null != jestClient)  {
+            jestClient.shutdownClient();  
+        }
+    } 
 }
