@@ -5,7 +5,6 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
-import io.searchbox.indices.IndicesExists;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,35 +15,56 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 public class SearchService {
     String indexName = "feed";
-	/**
+	
+    /**
+     * Create new index
+     * @param jestClient
+     * @param indexName
+     * @throws Exception
+     */
+    public void createIndex(JestClient jestClient, String indexName) throws Exception {
+    	CreateIndex createIndex = new CreateIndex(indexName);
+        jestClient.execute(createIndex);
+    }
+    
+    /**
+     * Delete index
+     * @param jestClient
+     * @param indexName
+     * @throws Exception
+     */
+    public void deleteIndex(JestClient jestClient, String indexName) throws Exception {
+    	DeleteIndex deleteIndex = new DeleteIndex(indexName);
+        jestClient.execute(deleteIndex);
+    }
+    
+    public void addIndex(JestClient jestClient, String indexName) throws Exception {
+    	int num = 10;
+    	Bulk bulk = new Bulk(indexName, indexName);
+        for (int i = 0; i < num; i++) {
+            FeedInfo news = new FeedInfo();
+            news.setId(String.valueOf(i + 1));
+            news.setTitle("elasticsearch RESTful搜索引擎-(java jest 使用[入门])" + (i + 1));
+            news.setDescription("好吧下面我介绍下jest(第三方工具),个人认为还是非常不错的...想对ES用来更好,多多研究源代码吧...迟点,会写一些关于ES的源代码研究文章,现在暂时还是入门的阶段.哈..(不敢,不敢)"
+                    + (i + 1));
+            bulk.addIndex(new Index.Builder(news).build());
+        }
+        jestClient.execute(bulk);
+    }
+    
+    /**
      * Create es feedinfo
      */
     public void builderSearchIndex(JestClient jestClient) {
-        int num = 10;
         long start = System.currentTimeMillis();
         try {
-        	IndicesExists indicesExists = new IndicesExists(indexName);
-            DeleteIndex deleteIndex = new DeleteIndex(indexName);
-            jestClient.execute(deleteIndex);
-
-            CreateIndex createIndex = new CreateIndex(indexName);
-            jestClient.execute(createIndex);
-            // Bulk 两个参数1:索引名称2:类型名称(用文章(article)做类型名称)
-            Bulk bulk = new Bulk(indexName, indexName);
-            for (int i = 0; i < num; i++) {
-                FeedInfo news = new FeedInfo();
-                news.setId(String.valueOf(i + 1));
-                news.setTitle("elasticsearch RESTful搜索引擎-(java jest 使用[入门])" + (i + 1));
-                news.setDescription("好吧下面我介绍下jest(第三方工具),个人认为还是非常不错的...想对ES用来更好,多多研究源代码吧...迟点,会写一些关于ES的源代码研究文章,现在暂时还是入门的阶段.哈..(不敢,不敢)"
-                        + (i + 1));
-                bulk.addIndex(new Index.Builder(news).build());
-            }
-            jestClient.execute(bulk);
+        	this.createIndex(jestClient, indexName);
+        	this.addIndex(jestClient, indexName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         long end = System.currentTimeMillis();
-        System.out.println("创建索引时间:数据量是  " + num + "记录,共用时间 -->> " + (end - start) + " 毫秒");
+        System.out.println("创建索引时间:共用时间 -->> " + (end - start) + " 毫秒");
     }
     
     /**

@@ -11,7 +11,7 @@ public class JestClientInit {
 	private static JestClient jestClient;
 
     /**
-     * 配置jest客户端,到时使用spring时,可以用配置方式 ,现在暂时使用new ...
+     * Init clientConfig
      * 
      * @return
      */
@@ -26,19 +26,22 @@ public class JestClientInit {
     }
 
     /**
-     * 获取一个jest的对象
+     * Get a jest object
      * 
      * @return
      */
     public static JestClient jestClient() {
         JestClientFactory factory = new JestClientFactory();
         factory.setClientConfig(clientConfig());
-        if (jestClient != null) {
+        if (jestClient == null) {
         	jestClient = factory.getObject();
         }
         return jestClient;
     }
     
+    /**
+     * Close Jest client
+     */
     public void closeJestClient(){  
         if(null != jestClient)  {
             jestClient.shutdownClient();  

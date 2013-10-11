@@ -27,5 +27,7 @@
 	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/commons-lang3-3.1-bin/commons-lang3-3.1/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/commons-lang-2.6-bin/commons-lang-2.6/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/gson-1.7.1.jar/gson-1.7.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jeffery/Downloads/guava-15.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
