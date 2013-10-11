@@ -44,9 +44,8 @@ public class SearchService {
         for (int i = 0; i < num; i++) {
             FeedInfo news = new FeedInfo();
             news.setId(String.valueOf(i + 1));
-            news.setTitle("elasticsearch RESTful搜索引擎-(java jest 使用[入门])" + (i + 1));
-            news.setDescription("好吧下面我介绍下jest(第三方工具),个人认为还是非常不错的...想对ES用来更好,多多研究源代码吧...迟点,会写一些关于ES的源代码研究文章,现在暂时还是入门的阶段.哈..(不敢,不敢)"
-                    + (i + 1));
+            news.setTitle("Test Title" + (i + 1));
+            news.setDescription("This is my description" + (i + 1));
             bulk.addIndex(new Index.Builder(news).build());
         }
         jestClient.execute(bulk);
