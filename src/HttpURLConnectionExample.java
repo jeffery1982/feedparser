@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -20,15 +22,29 @@ public class HttpURLConnectionExample {
 	 
 	public static void main(String[] args) throws Exception {
 		HttpURLConnectionExample http = new HttpURLConnectionExample();
-		http.createIndex("feedindex");
-		
+		//http.createIndex("feedindex");
+		http.putMapping("feedindex", "feed");
 	}
 	
 	public void createIndex(String indexName) throws Exception {
 		String url = String.format("http://localhost:9200/%s", indexName);
 		HttpClient client= new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
-		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/feed.meta.txt")));
+		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/setting")));
+		request.setEntity(entity);
+		HttpResponse result = client.execute(request);
+		HttpEntity resultEntity = result.getEntity();
+		InputStream inputStream = resultEntity.getContent();
+		byte[] responseBody = IOUtils.toByteArray(inputStream);
+		String resultString = new String(responseBody);
+		System.out.println(resultString);
+	}
+	
+	public void putMapping(String indexName, String type) throws UnsupportedEncodingException, IOException {
+		String url = String.format("http://localhost:9200/%s/%s/_mapping", indexName, type);
+		HttpClient client= new DefaultHttpClient();
+		HttpPost request = new HttpPost(url);
+		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/mappings")));
 		request.setEntity(entity);
 		HttpResponse result = client.execute(request);
 		HttpEntity resultEntity = result.getEntity();
