@@ -11,7 +11,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,7 +25,9 @@ public class HttpURLConnectionExample {
 	public static void main(String[] args) throws Exception {
 		HttpURLConnectionExample http = new HttpURLConnectionExample();
 		//http.createIndex("feedindex");
-		http.putMapping("feedindex", "feed");
+		//http.putMapping("feedindex", "feed");
+		//http.addIndex("feedindex", "feed", 1);
+		http.getIndex("feedindex", "feed", 1);
 	}
 	
 	public void createIndex(String indexName) throws Exception {
@@ -45,6 +49,32 @@ public class HttpURLConnectionExample {
 		HttpClient client= new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
 		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/mappings")));
+		request.setEntity(entity);
+		HttpResponse result = client.execute(request);
+		HttpEntity resultEntity = result.getEntity();
+		InputStream inputStream = resultEntity.getContent();
+		byte[] responseBody = IOUtils.toByteArray(inputStream);
+		String resultString = new String(responseBody);
+		System.out.println(resultString);
+	}
+	
+	public void getIndex(String indexName, String type, long id) throws ClientProtocolException, IOException {
+		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
+		HttpClient client= new DefaultHttpClient();
+		HttpGet request = new HttpGet(url);
+		HttpResponse result = client.execute(request);
+		HttpEntity resultEntity = result.getEntity();
+		InputStream inputStream = resultEntity.getContent();
+		byte[] responseBody = IOUtils.toByteArray(inputStream);
+		String resultString = new String(responseBody);
+		System.out.println(resultString);
+	}
+	
+	public void addIndex(String indexName, String type, long id) throws UnsupportedEncodingException, IOException {
+		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
+		HttpClient client= new DefaultHttpClient();
+		HttpPost request = new HttpPost(url);
+		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/sampledoc")));
 		request.setEntity(entity);
 		HttpResponse result = client.execute(request);
 		HttpEntity resultEntity = result.getEntity();
