@@ -91,7 +91,7 @@ public class FeedParser {
 		XmlReader reader = null;
 		try {
 			reader = new XmlReader(url);
-			SyndFeed feed = new SyndFeedInput().build(reader);
+			SyndFeed feed = new SyndFeedInput().build((java.io.Reader)reader);
 			for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 				SyndEntry entry = (SyndEntry) i.next();
 				FeedInfo feedInfo = new FeedInfo();

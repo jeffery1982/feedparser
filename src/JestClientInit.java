@@ -20,8 +20,8 @@ public class JestClientInit {
         ClientConfig clientConfig = new ClientConfig();
         Set<String> servers = new LinkedHashSet<String>();
         servers.add(connectionUrl);
-        clientConfig.getServerProperties().put(ClientConstants.SERVER_LIST, servers);
-        clientConfig.getClientFeatures().put(ClientConstants.IS_MULTI_THREADED, false);
+        clientConfig.getProperties().put(ClientConstants.SERVER_LIST, servers);
+        clientConfig.getProperties().put(ClientConstants.IS_MULTI_THREADED, false);
         return clientConfig;
     }
 
