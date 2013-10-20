@@ -1,3 +1,4 @@
+package com.mediabox.feedparser.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

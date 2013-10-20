@@ -1,3 +1,4 @@
+package com.mediabox.feedparser.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mediabox.feedparser.entity.FeedSource;
 
 
 public class Utils {

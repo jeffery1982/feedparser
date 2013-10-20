@@ -1,3 +1,4 @@
+package com.mediabox.feedparser.entity;
 import io.searchbox.annotations.JestId;
 
 import java.util.Date;

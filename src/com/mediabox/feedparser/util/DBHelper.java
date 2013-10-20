@@ -1,3 +1,4 @@
+package com.mediabox.feedparser.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;

@@ -1,3 +1,4 @@
+package com.mediabox.feedparser.util;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.ClientConfig;
