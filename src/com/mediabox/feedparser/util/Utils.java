@@ -23,7 +23,7 @@ public class Utils {
 		
 		while (jParser.nextToken() != JsonToken.END_OBJECT) {  
 			String fieldname = jParser.getCurrentName();  
-			if ("uri".equals(fieldname)) {  
+			if ("url".equals(fieldname)) {  
 				jParser.nextToken();
 				System.out.println(jParser.getText());  
 				feedUrlList.add(jParser.getText());

@@ -19,15 +19,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 
-public class HttpURLConnectionExample {
+public class HttpESHelper {
 	private final String USER_AGENT = "Mozilla/5.0";
 	 
 	public static void main(String[] args) throws Exception {
-		HttpURLConnectionExample http = new HttpURLConnectionExample();
+		HttpESHelper http = new HttpESHelper();
 		//http.createIndex("feedindex");
 		//http.putMapping("feedindex", "feed");
 		//http.addIndex("feedindex", "feed", 1);
-		http.getIndex("feedindex", "feed", 1);
+		//http.getIndex("feedindex", "feed", 1);
 	}
 	
 	public void createIndex(String indexName) throws Exception {
@@ -70,11 +70,11 @@ public class HttpURLConnectionExample {
 		System.out.println(resultString);
 	}
 	
-	public void addIndex(String indexName, String type, long id) throws UnsupportedEncodingException, IOException {
+	public void addIndex(String indexName, String type, String id, String indexEntity) throws UnsupportedEncodingException, IOException {
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
 		HttpClient client= new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
-		HttpEntity entity = new StringEntity(FileUtils.readFileToString(new File("testdata/sampledoc")));
+		HttpEntity entity = new StringEntity(indexEntity);//FileUtils.readFileToString(new File("testdata/sampledoc")));
 		request.setEntity(entity);
 		HttpResponse result = client.execute(request);
 		HttpEntity resultEntity = result.getEntity();

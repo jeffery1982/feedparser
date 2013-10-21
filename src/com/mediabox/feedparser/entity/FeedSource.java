@@ -7,17 +7,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 public class FeedSource {
-	private int id;
+	private String id;
 	private String title;
 	private String description;
-	private String uri;
+	private String url;
 	private String weight;
+	private String site;
+	private String is_full_text;
+	private String type;
+	private String lan;
+	private String create_date;
+	private String update_date;
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
@@ -35,13 +41,13 @@ public class FeedSource {
 		this.description = description;
 	}
 	
-	@JsonProperty("uri")
-	public String getUri() {
-		return uri;
+	@JsonProperty("url")
+	public String getUrl() {
+		return url;
 	}
 	
-	public void setUri(String uri) {
-		this.uri = uri;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@JsonProperty("weight")

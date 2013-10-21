@@ -42,12 +42,12 @@ public class FeedParser {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String feedListFilePath = "./testdata/271feeds.txt";
+		String feedListFilePath = "./testdata/tech-7-20131009.txt";
 		try {
 			FeedSource[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
 			for (FeedSource feed : feedList) {
-				System.out.println("Download uri: " + feed.getUri());
-				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feed.getUri());
+				System.out.println("Download url: " + feed.getUrl());
+				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feed.getUrl());
 				if (feedInfoList != null) {
 					System.out.println("feedInfoList size: " + feedInfoList.size());
 				}
