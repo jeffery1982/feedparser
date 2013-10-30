@@ -1,4 +1,4 @@
-package com.mediabox.feedparser.entity;
+package com.notenet.feedparser.entity;
 import io.searchbox.annotations.JestId;
 
 import java.util.Date;

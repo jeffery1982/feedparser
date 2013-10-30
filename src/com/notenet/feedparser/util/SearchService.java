@@ -1,4 +1,4 @@
-package com.mediabox.feedparser.util;
+package com.notenet.feedparser.util;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
@@ -13,7 +13,7 @@ import java.util.List;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
-import com.mediabox.feedparser.entity.FeedInfo;
+import com.notenet.feedparser.entity.FeedInfo;
 
 
 public class SearchService {

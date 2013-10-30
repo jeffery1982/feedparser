@@ -21,10 +21,10 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.mediabox.feedparser.entity.FeedInfo;
-import com.mediabox.feedparser.entity.FeedSource;
-import com.mediabox.feedparser.util.DBHelper;
-import com.mediabox.feedparser.util.Utils;
+import com.notenet.feedparser.entity.FeedInfo;
+import com.notenet.feedparser.entity.FeedSource;
+import com.notenet.feedparser.util.DBHelper;
+import com.notenet.feedparser.util.Utils;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
