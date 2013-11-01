@@ -58,7 +58,7 @@ public class HttpESHelper {
 		System.out.println(resultString);
 	}
 	
-	public void getIndex(String indexName, String type, long id) throws ClientProtocolException, IOException {
+	public String getIndex(String indexName, String type, String id) throws ClientProtocolException, IOException {
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
 		HttpClient client= new DefaultHttpClient();
 		HttpGet request = new HttpGet(url);
@@ -67,10 +67,11 @@ public class HttpESHelper {
 		InputStream inputStream = resultEntity.getContent();
 		byte[] responseBody = IOUtils.toByteArray(inputStream);
 		String resultString = new String(responseBody);
-		System.out.println(resultString);
+		return resultString;
 	}
 	
 	public void addIndex(String indexName, String type, String id, String indexEntity) throws UnsupportedEncodingException, IOException {
+		System.out.println("Put into index for index name: " + indexName);
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
 		HttpClient client= new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);

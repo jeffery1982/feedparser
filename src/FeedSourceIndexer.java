@@ -24,8 +24,12 @@ public class FeedSourceIndexer {
 		FeedSource[] feedSourceList = indexer.getFeedSourceList();
 		for (FeedSource feedSource : feedSourceList) {
 			String id = feedSource.getId();
-			String content = gson.toJson(feedSource);
-			http.addIndex("feedindex", "feed", id, content);
+			if (http.getIndex("feedindex", "feed", id).contains("\"exists\":true")) {
+				System.out.println("Feed: " + id + " exists");
+			} else {
+				String content = gson.toJson(feedSource);
+				http.addIndex("feedindex", "feed", id, content);
+			}
 		}
 	}
 	
