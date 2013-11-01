@@ -1,19 +1,15 @@
+package com.notenet.feedparser.execute;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
 import com.notenet.feedparser.entity.FeedSource;
 
-
 public class FeedSourceIndexer {
+	
 	public static void main(String[] args) throws Exception {
 		HttpESHelper http = new HttpESHelper();
 		Gson gson = new Gson();
