@@ -75,6 +75,7 @@ public class HttpESHelper {
 		System.out.println("Put into index for index name: " + indexName);
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
 		HttpClient client= new DefaultHttpClient();
+		client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
 		HttpPost request = new HttpPost(url);
 		HttpEntity entity = new StringEntity(indexEntity);//FileUtils.readFileToString(new File("testdata/sampledoc")));
 		request.setEntity(entity);
