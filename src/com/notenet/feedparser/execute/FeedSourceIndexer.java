@@ -13,6 +13,7 @@ public class FeedSourceIndexer {
 	public static void main(String[] args) throws Exception {
 		HttpESHelper http = new HttpESHelper();
 		Gson gson = new Gson();
+		
 		//http.createIndex("feedindex");
 		//http.putMapping("feedindex", "feed");
 		//http.getIndex("feedindex", "feed", 1);
@@ -20,6 +21,7 @@ public class FeedSourceIndexer {
 		FeedSource[] feedSourceList = indexer.getFeedSourceList();
 		for (FeedSource feedSource : feedSourceList) {
 			String id = feedSource.getId();
+			System.out.println("Start processing feed Source ID: " + id);
 			if (http.getIndex("feedindex", "feed", id).contains("\"exists\":true")) {
 				System.out.println("Feed: " + id + " exists");
 			} else {
@@ -36,4 +38,6 @@ public class FeedSourceIndexer {
 		FeedSource[] feedSourceList = gson.fromJson(fileContent, FeedSource[].class);
 		return feedSourceList;
 	}
+	
+	
 }
