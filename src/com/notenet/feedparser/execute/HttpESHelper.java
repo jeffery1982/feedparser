@@ -84,8 +84,6 @@ public class HttpESHelper {
 		HttpResponse result = client.execute(request);
 		HttpEntity resultEntity = result.getEntity();
 		InputStream inputStream = resultEntity.getContent();
-		Header header = resultEntity.getContentEncoding();
-		System.out.println("Head encoding: " + header.getName());
 		byte[] responseBody = IOUtils.toByteArray(inputStream);
 		String resultString = new String(responseBody);
 		System.out.println(resultString);
