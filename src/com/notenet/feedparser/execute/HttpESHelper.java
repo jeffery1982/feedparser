@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -67,7 +69,7 @@ public class HttpESHelper {
 		HttpEntity resultEntity = result.getEntity();
 		InputStream inputStream = resultEntity.getContent();
 		byte[] responseBody = IOUtils.toByteArray(inputStream);
-		String resultString = new String(responseBody);
+		String resultString = new String(responseBody, Charset.forName("UTF-8"));
 		return resultString;
 	}
 	
@@ -75,13 +77,15 @@ public class HttpESHelper {
 		System.out.println("Put into index for index name: " + indexName);
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
 		HttpClient client= new DefaultHttpClient();
-		client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
+		//client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
 		HttpPost request = new HttpPost(url);
-		HttpEntity entity = new StringEntity(indexEntity);//FileUtils.readFileToString(new File("testdata/sampledoc")));
+		HttpEntity entity = new StringEntity(indexEntity, Charset.forName("UTF-8") );//FileUtils.readFileToString(new File("testdata/sampledoc")));
 		request.setEntity(entity);
 		HttpResponse result = client.execute(request);
 		HttpEntity resultEntity = result.getEntity();
 		InputStream inputStream = resultEntity.getContent();
+		Header header = resultEntity.getContentEncoding();
+		System.out.println("Head encoding: " + header.getName());
 		byte[] responseBody = IOUtils.toByteArray(inputStream);
 		String resultString = new String(responseBody);
 		System.out.println(resultString);

@@ -1,6 +1,7 @@
 package com.notenet.feedparser.execute;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,10 +14,10 @@ public class FeedSourceIndexer {
 	public static void main(String[] args) throws Exception {
 		HttpESHelper http = new HttpESHelper();
 		Gson gson = new Gson();
-		
 		//http.createIndex("feedindex");
 		//http.putMapping("feedindex", "feed");
-		//http.getIndex("feedindex", "feed", 1);
+//		String indexContent = http.getIndex("feedindex", "feed", "http%3A%2F%2Fes.appleweblog.com%2Ffeed%2F");
+//		System.out.println(indexContent);
 		FeedSourceIndexer indexer = new FeedSourceIndexer();
 		FeedSource[] feedSourceList = indexer.getFeedSourceList();
 		for (FeedSource feedSource : feedSourceList) {
@@ -33,7 +34,7 @@ public class FeedSourceIndexer {
 	
 	public FeedSource[] getFeedSourceList() throws JsonParseException, IOException {
 		String filePath = "c:/testdata/tech-7-20031020.txt";
-		String fileContent = FileUtils.readFileToString(new File(filePath), "UTF-8");
+		String fileContent = FileUtils.readFileToString(new File(filePath), null);
 		Gson gson = new Gson();
 		FeedSource[] feedSourceList = gson.fromJson(fileContent, FeedSource[].class);
 		return feedSourceList;
