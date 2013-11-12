@@ -34,7 +34,7 @@ public class FeedSourceIndexer {
 	
 	public FeedSource[] getFeedSourceList() throws JsonParseException, IOException {
 		String filePath = "c:/testdata/tech-7-20031020.txt";
-		String fileContent = FileUtils.readFileToString(new File(filePath), null);
+		String fileContent = FileUtils.readFileToString(new File(filePath));
 		Gson gson = new Gson();
 		FeedSource[] feedSourceList = gson.fromJson(fileContent, FeedSource[].class);
 		return feedSourceList;
