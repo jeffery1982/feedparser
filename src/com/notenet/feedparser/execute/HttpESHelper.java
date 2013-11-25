@@ -20,6 +20,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.notenet.feedparser.entity.FeedSource;
+
 
 public class HttpESHelper {
 	private final String USER_AGENT = "Mozilla/5.0";
@@ -46,6 +48,12 @@ public class HttpESHelper {
 	
 	public String getIndex(String indexName, String type, String id) throws ClientProtocolException, IOException {
 		String url = String.format("http://localhost:9200/%s/%s/%s", indexName, type, id);
+		String resultString = this.sendGet(url);
+		return resultString;
+	}
+	
+	public String getIndexSource(String indexName, String type, String id) throws ClientProtocolException, IOException {
+		String url = String.format("http://localhost:9200/%s/%s/%s/_source", indexName, type, id);
 		String resultString = this.sendGet(url);
 		return resultString;
 	}
