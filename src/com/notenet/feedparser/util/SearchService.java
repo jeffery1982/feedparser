@@ -68,29 +68,4 @@ public class SearchService {
         long end = System.currentTimeMillis();
         System.out.println("创建索引时间:共用时间 -->> " + (end - start) + " 毫秒");
     }
-    
-    /**
-     * 搜索新闻
-     * 
-     * @param param
-     * @return
-     */
-    public List searchsNews(JestClient jestClient, String param) {
-        try {
-            long start = System.currentTimeMillis();
-            QueryBuilder queryBuilder = QueryBuilders.queryString(param);
-            Search search = new Search(Search.createQueryWithBuilder(queryBuilder.toString()));
-            search.addIndex(indexName);
-            search.addType(indexName);
-            JestResult result = jestClient.execute(search);
-            long end = System.currentTimeMillis();
-            System.out.println("在100万条记录中,搜索新闻,共用时间 -->> " + (end - start) + " 毫秒");
-            return result.getSourceAsObjectList(FeedInfo.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
