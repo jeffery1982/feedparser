@@ -19,8 +19,8 @@ public class FeedSourceSearch {
             Search search = new Search(query);  
               
             // multiple index or types can be added.  
-            search.addIndex("news");  
-            System.out.println("index exist is "+search.isIndexExist("news"));  
+            search.addIndex("feed");
+            System.out.println("index exist is "+search.isIndexExist("feed"));  
               
             JestResult result = client.execute(search);  
             List<FeedSource> list = result.getSourceAsObjectList(FeedSource.class);  
@@ -43,8 +43,8 @@ public class FeedSourceSearch {
 			QueryBuilder queryBuilder = QueryBuilders.queryString(param);
 			Search search = new Search(
 					Search.createQueryWithBuilder(queryBuilder.toString()));
-			search.addIndex("news");
-			search.addType("news");
+			search.addIndex("feed");
+			search.addType("feedsource");
 			JestResult result = client.execute(search);
 			List<FeedSource> list = result
 					.getSourceAsObjectList(FeedSource.class);

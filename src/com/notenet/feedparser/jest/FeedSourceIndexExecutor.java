@@ -27,21 +27,23 @@ public class FeedSourceIndexExecutor {
 		 * Object()).index("articles").type("article").build();
 		 * elasticSearchClient.execute(index);
 		 */
-		Bulk bulk = new Bulk("news", "news");
+		Bulk bulk = new Bulk("feed", "feedsource");
 		FeedSource[] feedSourceList = feedSourceHelper.getFeedSourceList();
 
 		for (int i = 0; i < feedSourceList.length; i++) {
 			FeedSource feedSource = feedSourceList[i];
-			bulk.addIndex(new Index.Builder(feedSource).build());
+			Index index = new Index.Builder(feedSource).build();
+			bulk.addIndex(index);
 		}
 
 		try {
 			// Delete news index if it is exists
-			DeleteIndex deleteIndex = new DeleteIndex("news");
-			client.execute(deleteIndex);
+			//DeleteIndex deleteIndex = new DeleteIndex("feed");
+			//client.execute(deleteIndex);
 
 			// Create articles index
-			CreateIndex createIndex = new CreateIndex("news");
+			CreateIndex createIndex = new CreateIndex("feed");
+			
 			client.execute(createIndex);
 
 			client.execute(bulk);
