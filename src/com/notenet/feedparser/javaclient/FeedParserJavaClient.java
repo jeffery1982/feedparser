@@ -37,7 +37,6 @@ public class FeedParserJavaClient {
         createIndexRequestBuilder.execute().actionGet();
         String source = "";
         createIndexRequestBuilder.addMapping(Constants.FEED_SOURCE_INDEX_TYPE, source);
-        
 //        for (FeedSource feedSource : feedSourceList) {
 //        	client.prepareIndex();
 //        }
@@ -79,7 +78,11 @@ public class FeedParserJavaClient {
 	    return actionGet.isExists();
 	}
 	
-	
+	private boolean isDocumentExist(Client client, String indexName, String indexType, String id) {
+		GetResponse getResponse = client.prepareGet(indexName, indexType, id).execute()
+				.actionGet();
+		return getResponse.isExists();
+	}
 	
 	public static Map<String, Object> putJsonDocument(FeedSource feedSource) {
 		Map<String, Object> jsonDocument = new HashMap<String, Object>();
@@ -93,11 +96,9 @@ public class FeedParserJavaClient {
 		return jsonDocument;
 	}
 
-	public static void getDocument(Client client, String index, String type,
-			String id) {
+	public void getDocument(Client client, String index, String type, String id) {
 
-		GetResponse getResponse = client.prepareGet(index, type, id).execute()
-				.actionGet();
+		GetResponse getResponse = client.prepareGet(index, type, id).execute().actionGet();
 		Map<String, Object> source = getResponse.getSource();
 
 		System.out.println("------------------------------");
@@ -109,7 +110,7 @@ public class FeedParserJavaClient {
 		System.out.println("------------------------------");
 	}
 
-	public static void updateDocument(Client client, String index, String type,
+	public void updateDocument(Client client, String index, String type,
 			String id, String field, String newValue) {
 
 		Map<String, Object> updateObject = new HashMap<String, Object>();
@@ -120,7 +121,7 @@ public class FeedParserJavaClient {
 				.setScriptParams(updateObject).execute().actionGet();
 	}
 
-	public static void updateDocument(Client client, String index, String type,
+	public void updateDocument(Client client, String index, String type,
 			String id, String field, String[] newValue) {
 
 		String tags = "";
@@ -137,7 +138,7 @@ public class FeedParserJavaClient {
 				.setScriptParams(updateObject).execute().actionGet();
 	}
 
-	public static void searchDocument(Client client, String index, String type,
+	public void searchDocument(Client client, String index, String type,
 			String field, String value) {
 
 		SearchResponse response = client.prepareSearch(index).setTypes(type)
@@ -155,7 +156,7 @@ public class FeedParserJavaClient {
 		}
 	}
 
-	public static void deleteDocument(Client client, String index, String type,
+	public void deleteDocument(Client client, String index, String type,
 			String id) {
 
 		DeleteResponse response = client.prepareDelete(index, type, id)
