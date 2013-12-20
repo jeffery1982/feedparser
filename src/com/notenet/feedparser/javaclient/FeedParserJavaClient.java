@@ -3,8 +3,10 @@ package com.notenet.feedparser.javaclient;
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Date;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,93 +14,206 @@ import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.cluster.ClusterState;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
-import com.notenet.feedparser.entity.FeedSource;
-import com.notenet.feedparser.util.Constants;
-import com.notenet.feedparser.util.FeedSourceHelper;
-
+/**
+ * FeedParser java client
+ * @author Jeffery
+ *
+ */
 public class FeedParserJavaClient {
-	public static void main(String args[]) throws IOException{
-		// init node and client
-        Node node     = nodeBuilder().clusterName(Constants.CLUSTER_NAME).node();
-        Client client = node.client();
-        // prepare data
-//        FeedSourceHelper helper = new FeedSourceHelper();
-//        FeedSource[] feedSourceList = helper.getFeedSourceList();
-        // Create Index and set settings and mappings
-        CreateIndexRequestBuilder createIndexRequestBuilder = client.admin().indices().prepareCreate(Constants.FEED_SOURCE_INDEX_NAME);
-        createIndexRequestBuilder.execute().actionGet();
-        String source = "";
-        createIndexRequestBuilder.addMapping(Constants.FEED_SOURCE_INDEX_TYPE, source);
-//        for (FeedSource feedSource : feedSourceList) {
-//        	client.prepareIndex();
-//        }
-        
-//        client.prepareIndex("feedindex", "feed", "1")
-//              .setSource(putJsonDocument("ElasticSearch: Java",
-//                                         "ElasticSeach provides Java API, thus it executes all operations " +
-//                                          "asynchronously by using client object..",
-//                                         new Date(),
-//                                         new String[]{"elasticsearch"},
-//                                         "test")).execute().actionGet();
-//        
-//        client.prepareIndex("kodcucom", "article", "2")
-//              .setSource(putJsonDocument("Java Web Application and ElasticSearch (Video)",
-//                                         "Today, here I am for exemplifying the usage of ElasticSearch which is an open source, distributed " +
-//                                         "and scalable full text search engine and a data analysis tool in a Java web application.",
-//                                         new Date(),
-//                                         new String[]{"elasticsearch"},
-//                                         "test")).execute().actionGet();
-//        
-//        getDocument(client, "kodcucom", "article", "1");
-//
-//        updateDocument(client, "kodcucom", "article", "1", "title", "ElasticSearch: Java API");
-//        updateDocument(client, "kodcucom", "article", "1", "tags", new String[]{"bigdata"});
-//
-//        getDocument(client, "kodcucom", "article", "1");
-//
-//        searchDocument(client, "kodcucom", "article", "title", "ElasticSearch");
-//        
-//        deleteDocument(client, "kodcucom", "article", "1");
-        
-        node.close();
-    }
+	private Node node;
+	private Client client;
 	
-	private boolean isIndexExist(Client client, String indexName) {
-	    ActionFuture<IndicesExistsResponse> exists = client.admin().indices()
-	            .exists(new IndicesExistsRequest(indexName));
-	    IndicesExistsResponse actionGet = exists.actionGet();
-	    return actionGet.isExists();
+	public Node getNode() {
+		return node;
+	}
+
+	public void setNode(Node node) {
+		this.node = node;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public FeedParserJavaClient(String clusterName) {
+		this.node = nodeBuilder().clusterName(clusterName).node();
+		this.client = node.client();
 	}
 	
-	private boolean isDocumentExist(Client client, String indexName, String indexType, String id) {
-		GetResponse getResponse = client.prepareGet(indexName, indexType, id).execute()
-				.actionGet();
+	public static void main(String args[]) throws IOException {
+		// init node and client
+		
+		// prepare data
+		// FeedSourceHelper helper = new FeedSourceHelper();
+		// FeedSource[] feedSourceList = helper.getFeedSourceList();
+		// Create Index and set settings and mappings
+
+		// for (FeedSource feedSource : feedSourceList) {
+		// client.prepareIndex();
+		// }
+
+		// client.prepareIndex("feedindex", "feed", "1")
+		// .setSource(putJsonDocument("ElasticSearch: Java",
+		// "ElasticSeach provides Java API, thus it executes all operations " +
+		// "asynchronously by using client object..",
+		// new Date(),
+		// new String[]{"elasticsearch"},
+		// "test")).execute().actionGet();
+		//
+		// client.prepareIndex("kodcucom", "article", "2")
+		// .setSource(putJsonDocument("Java Web Application and ElasticSearch (Video)",
+		// "Today, here I am for exemplifying the usage of ElasticSearch which is an open source, distributed "
+		// +
+		// "and scalable full text search engine and a data analysis tool in a Java web application.",
+		// new Date(),
+		// new String[]{"elasticsearch"},
+		// "test")).execute().actionGet();
+		//
+		// getDocument(client, "kodcucom", "article", "1");
+		//
+		// updateDocument(client, "kodcucom", "article", "1", "title",
+		// "ElasticSearch: Java API");
+		// updateDocument(client, "kodcucom", "article", "1", "tags", new
+		// String[]{"bigdata"});
+		//
+		// getDocument(client, "kodcucom", "article", "1");
+		//
+		// searchDocument(client, "kodcucom", "article", "title",
+		// "ElasticSearch");
+		//
+		// deleteDocument(client, "kodcucom", "article", "1");
+
+		//node.close();
+	}
+	
+	public Client getClient() {
+		return client;
+	}
+	
+	public void createIndex(String indexName) {
+		CreateIndexRequestBuilder createIndexRequestBuilder = this.client.admin()
+				.indices().prepareCreate(indexName);
+		createIndexRequestBuilder.execute().actionGet();
+	}
+
+	private static String readJsonDefinition(String type) throws Exception {
+		return readFileInClasspath("/estemplate/" + type + ".json");
+	}
+
+	public static String readFileInClasspath(String url) throws Exception {
+		StringBuffer bufferJSON = new StringBuffer();
+
+		try {
+			InputStream ips = FeedParserJavaClient.class
+					.getResourceAsStream(url);
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				bufferJSON.append(line);
+			}
+			br.close();
+		} catch (Exception e) {
+			return null;
+		}
+
+		return bufferJSON.toString();
+	}
+
+	public void pushMapping(String index, String type, String mappingJson) throws Exception {
+		// If type does not exist, we create it
+		boolean mappingExist = this.isMappingExist(index, type);
+		if (!mappingExist) {
+			if (mappingJson != null) {
+				PutMappingRequestBuilder pmrb = client.admin().indices()
+						.preparePutMapping(index).setType(type);
+
+					pmrb.setSource(mappingJson);
+
+				// Create type and mapping
+				PutMappingResponse response = pmrb.execute().actionGet();
+				if (!response.isAcknowledged()) {
+					throw new Exception("Could not define mapping for type ["
+							+ index + "]/[" + type + "].");
+				} else {
+					System.out.println("Mapping definition for ["+index+"]/["+type+"] succesfully created.");
+				}
+			} else {
+				System.out.println("No mapping definition for ["+index+"]/["+type+"]. Ignoring.");
+			}
+		} else {
+			System.out.println("Mapping ["+index+"]/["+type+"] already exists.");
+		}
+	}
+
+	public boolean isMappingExist(String index, String type) {
+		ClusterState cs = this.client.admin().cluster().prepareState()
+				.setFilterIndices(index).execute().actionGet().getState();
+		IndexMetaData imd = cs.getMetaData().index(index);
+
+		if (imd == null)
+			return false;
+
+		MappingMetaData mdd = imd.mapping(type);
+
+		if (mdd != null)
+			return true;
+		return false;
+	}
+
+	public boolean isIndexExist(String indexName) {
+		ActionFuture<IndicesExistsResponse> exists = client.admin().indices()
+				.exists(new IndicesExistsRequest(indexName));
+		IndicesExistsResponse actionGet = exists.actionGet();
+		return actionGet.isExists();
+	}
+
+	public boolean isDocumentExist(String indexName,
+			String indexType, String id) {
+		GetResponse getResponse = client.prepareGet(indexName, indexType, id)
+				.execute().actionGet();
 		return getResponse.isExists();
 	}
-	
-	public static Map<String, Object> putJsonDocument(FeedSource feedSource) {
-		Map<String, Object> jsonDocument = new HashMap<String, Object>();
 
-//		jsonDocument.put("title", feedSource.getCategories());
-//		jsonDocument.put("content", content);
-//		jsonDocument.put("postDate", postDate);
-//		jsonDocument.put("tags", tags);
-//		jsonDocument.put("author", author);
-
-		return jsonDocument;
+	public void createDocument(String indexName, String indexType, String json){
+	    System.out.println("Data creation");
+	    IndexResponse response=null;
+	    for (int i=0;i<10;i++){
+	        //Map<String, Object> json = new HashMap<String, Object>();
+	        //json.put("ATTR1", "new value" + i);
+	        response = this.client.prepareIndex(indexName, indexType)
+	                .setSource(json)
+	                .setOperationThreaded(false)
+	                .execute()
+	                .actionGet();
+	    }
+	    String _index = response.getIndex();
+	    String _type = response.getType();
+	    long _version = response.getVersion();
+	    System.out.println("Index : "+_index+"   Type : "+_type+"   Version : "+_version);
+	    System.out.println("----------------------------------");
 	}
 
-	public void getDocument(Client client, String index, String type, String id) {
+	public void getDocument(String index, String type, String id) {
 
-		GetResponse getResponse = client.prepareGet(index, type, id).execute().actionGet();
+		GetResponse getResponse = client.prepareGet(index, type, id).execute()
+				.actionGet();
 		Map<String, Object> source = getResponse.getSource();
 
 		System.out.println("------------------------------");
@@ -110,7 +225,7 @@ public class FeedParserJavaClient {
 		System.out.println("------------------------------");
 	}
 
-	public void updateDocument(Client client, String index, String type,
+	public void updateDocument(String index, String type,
 			String id, String field, String newValue) {
 
 		Map<String, Object> updateObject = new HashMap<String, Object>();
@@ -121,7 +236,7 @@ public class FeedParserJavaClient {
 				.setScriptParams(updateObject).execute().actionGet();
 	}
 
-	public void updateDocument(Client client, String index, String type,
+	public void updateDocument(String index, String type,
 			String id, String field, String[] newValue) {
 
 		String tags = "";
@@ -138,7 +253,7 @@ public class FeedParserJavaClient {
 				.setScriptParams(updateObject).execute().actionGet();
 	}
 
-	public void searchDocument(Client client, String index, String type,
+	public void searchDocument(String index, String type,
 			String field, String value) {
 
 		SearchResponse response = client.prepareSearch(index).setTypes(type)
@@ -156,7 +271,7 @@ public class FeedParserJavaClient {
 		}
 	}
 
-	public void deleteDocument(Client client, String index, String type,
+	public void deleteDocument(String index, String type,
 			String id) {
 
 		DeleteResponse response = client.prepareDelete(index, type, id)
