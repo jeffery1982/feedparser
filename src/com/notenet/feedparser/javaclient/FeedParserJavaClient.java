@@ -12,8 +12,10 @@ import java.util.Map;
 
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.admin.indices.mapping.delete.DeleteMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -25,7 +27,6 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.ClusterState;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
@@ -110,30 +111,17 @@ public class FeedParserJavaClient {
 				.indices().prepareCreate(indexName);
 		createIndexRequestBuilder.execute().actionGet();
 	}
-
-	private static String readJsonDefinition(String type) throws Exception {
-		return readFileInClasspath("/estemplate/" + type + ".json");
+	
+	public void deleteIndex(String indexName) {
+		DeleteIndexRequestBuilder deleteIndexRequestBuilder = this.client.admin()
+				.indices().prepareDelete(indexName);
+		deleteIndexRequestBuilder.execute().actionGet();
 	}
-
-	public static String readFileInClasspath(String url) throws Exception {
-		StringBuffer bufferJSON = new StringBuffer();
-
-		try {
-			InputStream ips = FeedParserJavaClient.class
-					.getResourceAsStream(url);
-			InputStreamReader ipsr = new InputStreamReader(ips);
-			BufferedReader br = new BufferedReader(ipsr);
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				bufferJSON.append(line);
-			}
-			br.close();
-		} catch (Exception e) {
-			return null;
-		}
-
-		return bufferJSON.toString();
+	
+	public void deleteMapping(String indexName) {
+		DeleteMappingRequestBuilder deleteMappingRequestBuilder = this.client.admin()
+				.indices().prepareDeleteMapping(indexName);
+		deleteMappingRequestBuilder.execute().actionGet();
 	}
 
 	public void pushMapping(String index, String type, String mappingJson) throws Exception {
