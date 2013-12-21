@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.notenet.feedparser.javaclient.FeedParserJavaClient;
 import com.notenet.feedparser.util.Constants;
 
-public class MainTest {
+public class JavaAPITest {
 	public static FeedParserJavaClient javaClient;
 	
 	@BeforeClass
