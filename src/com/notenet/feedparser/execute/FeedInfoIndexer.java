@@ -1,18 +1,19 @@
 package com.notenet.feedparser.execute;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.google.gson.Gson;
 import com.notenet.feedparser.entity.FeedSource;
+import com.notenet.feedparser.httpclient.FeedParserHttpClient;
+import com.notenet.feedparser.util.Constants;
 
 public class FeedInfoIndexer {
 	
 	public static void main(String[] args) throws Exception {
-		HttpESHelper http = new HttpESHelper();
+		FeedParserHttpClient http = new FeedParserHttpClient(Constants.ES_HOST_HTTP);
 		Gson gson = new Gson();
 		//http.createIndex("feedindex");
 		//http.putMapping("feedindex", "feed");
@@ -23,11 +24,11 @@ public class FeedInfoIndexer {
 		for (FeedSource feedSource : feedSourceList) {
 			String id = feedSource.getId();
 			System.out.println("Start processing feed Source ID: " + id);
-			if (http.getIndex("feedinfoindex", "feedinfo", id).contains("\"exists\":true")) {
+			if (http.getDocument("feedinfoindex", "feedinfo", id).contains("\"exists\":true")) {
 				System.out.println("Feed: " + id + " exists");
 			} else {
 				String content = gson.toJson(feedSource);
-				http.addIndex("feedindex", "feed", id, content);
+				http.addDocument("feedindex", "feed", id, content);
 			}
 		}
 	}
