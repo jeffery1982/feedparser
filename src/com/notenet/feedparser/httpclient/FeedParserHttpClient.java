@@ -17,40 +17,65 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.sun.net.httpserver.HttpsConfigurator;
+
 public class FeedParserHttpClient {
 	private final String USER_AGENT = "Mozilla/5.0";
-	private final String host = "http://localhost:9200";
+	private String host;
 	
-	public static void main(String[] args) throws Exception {
-		//HttpESHelper http = new HttpESHelper();
-		//http.createIndex("feedindex");
-		//http.putMapping("feedindex", "feed");
-		//http.addIndex("feedindex", "feed", 1);
-		//http.getIndex("feedindex", "feed", 1);
+//	public static void main(String[] args) throws Exception {
+//		//HttpESHelper http = new HttpESHelper();
+//		//http.createIndex("feedindex");
+//		//http.putMapping("feedindex", "feed");
+//		//http.addIndex("feedindex", "feed", 1);
+//		//http.getIndex("feedindex", "feed", 1);
+//	}
+	
+	public FeedParserHttpClient(String host) {
+		this.host = host;
 	}
 	
-	public void createIndex(String indexName) throws ClientProtocolException, IOException {
-		String url = String.format(host + "%s", indexName);
-		String resultString = this.sendPost(url, FileUtils.readFileToString(new File("testdata/setting")));
+	public void createIndex(String indexName, String setting) throws ClientProtocolException, IOException {
+		String url = String.format(this.host + "/%s/", indexName);
+		String resultString = this.sendPost(url, setting);
 		System.out.println(resultString);
 	}
 	
 	public void deleteIndex(String indexName) throws ClientProtocolException, IOException {
-		String url = String.format(host + "%s", indexName);
+		String url = String.format(this.host + "/%s/", indexName);	
 		String resultString = this.sendDelete(url);
 		System.out.println(resultString);
 	}
 	
+	public void getIndexStatus(String indexName) throws ClientProtocolException, IOException {
+		String url = String.format(this.host + "/%s/_status", indexName);	
+		String resultString = this.sendGet(url);
+		System.out.println(resultString);
+	}
+	
 	public void putMapping(String indexName, String type, String mappingJson) throws UnsupportedEncodingException, IOException {
-		String url = String.format(host + "/%s/%s/_mapping", indexName, type);
+		String url = String.format(this.host + "/%s/%s/_mapping", indexName, type);
 		String resultString = this.sendPost(url, mappingJson);
+		System.out.println(resultString);
+	}
+	
+	public void deleteMapping(String indexName, String type) throws UnsupportedEncodingException, IOException {
+		String url = String.format(this.host + "/%s/%s", indexName, type);
+		String resultString = this.sendDelete(url);
 		System.out.println(resultString);
 	}
 	
 	public String getDocument(String indexName, String type, String id) throws ClientProtocolException, IOException {
 		String url = String.format(host + "/%s/%s/%s", indexName, type, id);
 		String resultString = this.sendGet(url);
+		System.out.println(resultString);
 		return resultString;
+	}
+	
+	public void deleteDocument(String indexName, String type, String id) throws ClientProtocolException, IOException {
+		String url = String.format(host + "/%s/%s/%s", indexName, type, id);
+		String resultString = this.sendDelete(url);
+		System.out.println(resultString);
 	}
 	
 	public String getDocumentSource(String indexName, String type, String id) throws ClientProtocolException, IOException {
@@ -67,6 +92,7 @@ public class FeedParserHttpClient {
 	}
 	
 	private String sendPost(String url, String contentEntity) throws ClientProtocolException, IOException {
+		System.out.println("url: " + url);
 		HttpClient client= new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
 		HttpEntity entity = new StringEntity(contentEntity, Charset.forName("UTF-8") );//FileUtils.readFileToString(new File("testdata/sampledoc")));
@@ -80,6 +106,7 @@ public class FeedParserHttpClient {
 	}
 	
 	private String sendGet(String url) throws ClientProtocolException, IOException {
+		System.out.println("url: " + url);
 		HttpClient client= new DefaultHttpClient();
 		HttpGet request = new HttpGet(url);
 		HttpResponse result = client.execute(request);
@@ -88,9 +115,10 @@ public class FeedParserHttpClient {
 		byte[] responseBody = IOUtils.toByteArray(inputStream);
 		String resultString = new String(responseBody, Charset.forName("UTF-8"));
 		return resultString;
-	}	
-	
+	}
+		
 	private String sendDelete(String url) throws ClientProtocolException, IOException {
+		System.out.println("url: " + url);
 		HttpClient client= new DefaultHttpClient();
 		HttpDelete request = new HttpDelete(url);
 		HttpResponse result = client.execute(request);

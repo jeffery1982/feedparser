@@ -58,7 +58,7 @@ public class JavaAPITest {
 	@Test
 	public void searchDocumentTest() {
 		String field = "title";
-		String value = "apple";
+		String value = "AppleWeblog";
 		javaClient.searchDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, field, value);
 	}
 }

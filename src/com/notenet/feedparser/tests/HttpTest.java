@@ -2,9 +2,11 @@ package com.notenet.feedparser.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.notenet.feedparser.httpclient.FeedParserHttpClient;
@@ -13,6 +15,16 @@ import com.notenet.feedparser.util.Constants;
 public class HttpTest {
 	public static FeedParserHttpClient httpClient;
 	
+	@BeforeClass
+	public static void beforeClass() {
+		httpClient = new FeedParserHttpClient(Constants.ES_HOST_HTTP);
+	}
+	
+	@Test
+	public void getIndexStatusTest() throws ClientProtocolException, IOException {
+		httpClient.getIndexStatus(Constants.FEED_SOURCE_INDEX_NAME);
+	}
+	
 	@Test
 	public void deleteIndexTest() throws ClientProtocolException, IOException {
 		httpClient.deleteIndex(Constants.FEED_SOURCE_INDEX_NAME);
@@ -20,12 +32,13 @@ public class HttpTest {
 	
 	@Test
 	public void createIndexTest() throws ClientProtocolException, IOException {
-		httpClient.createIndex(Constants.FEED_SOURCE_INDEX_NAME);
+		String setting = FileUtils.readFileToString(new File("testdata/setting.txt"));
+		httpClient.createIndex(Constants.FEED_SOURCE_INDEX_NAME, setting);
 	}
 	
 	@Test
 	public void createMappingTest() throws Exception {
-		String mappingJson = FileUtils.readFileToString(new File("testdata/mappings"));
+		String mappingJson = FileUtils.readFileToString(new File("testdata/mapping.txt"));
 		httpClient.putMapping(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, mappingJson);
 	}
 	
@@ -42,10 +55,14 @@ public class HttpTest {
 		httpClient.getDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id);
 	}
 	
-//	@Test
-//	public void searchDocumentTest() {
-//		String field = "title";
-//		String value = "apple";
-//		httpClient.searchDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, field, value);
-//	}
+	@Test
+	public void deleteMappingTest() throws UnsupportedEncodingException, IOException {
+		httpClient.deleteMapping(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE);
+	}
+	
+	@Test
+	public void deleteDocumentTest() throws ClientProtocolException, IOException {
+		String id = "http%3A%2F%2Fes.appleweblog.com%2Ffeed%2F";
+		httpClient.deleteDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id);
+	}
 }

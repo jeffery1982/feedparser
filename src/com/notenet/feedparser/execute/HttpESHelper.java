@@ -42,7 +42,7 @@ public class HttpESHelper {
 	
 	public void putMapping(String indexName, String type) throws UnsupportedEncodingException, IOException {
 		String url = String.format("http://localhost:9200/%s/%s/_mapping", indexName, type);
-		String resultString = this.sendPost(url, FileUtils.readFileToString(new File("testdata/mappings")));
+		String resultString = this.sendPost(url, FileUtils.readFileToString(new File("testdata/mapping.txt")));
 		System.out.println(resultString);
 	}
 	

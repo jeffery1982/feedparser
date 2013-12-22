@@ -1,102 +1,92 @@
 ﻿{
-    "settings": {
-        "index": {
-            "number_of_replicas": 1
-        }
-    },
-    "mappings": {
-        "meta": {
-            "_source": {
-                "enabled": false
-            },
-            "properties": {
-                "url": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "not_analyzed"
-                },
-                "id": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "not_analyzed"
-                },
-                "title": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "analyzed",
-                    "term_vector": "with_positions_offsets"
-                },
-                "site": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "analyzed",
-                    "term_vector": "with_positions_offsets"
-                },
-                "description": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "analyzed",
-                    "term_vector": "with_positions_offsets"
-                },
-                "weight": {
-                    "type": "integer",
-                    "store": "yes"
-                },
-                "is_full_text": {
-                    "type": "byte",
-                    "store": "yes"
-                },
-                "type": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "not_analyzed"
-                },
-                "lan": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "not_analyzed"
-                },
-                "tags": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "analyzed",
-                    "term_vector": "with_positions_offsets"
-                },
-                "categories": {
-                    "type": "nested",
-                    "properties": {
-                        "root": {
-                            "type": "string",
-                            "store": "yes",
-                            "index": "not_analyzed"
-                        },
-                        "parent": {
-                            "type": "string",
-                            "store": "yes",
-                            "index": "not_analyzed"
-                        },
-                        "level": {
-                            "type": "short",
-                            "store": "yes"
-                        }
-                    }
-                },
-                "users": {
-                    "type": "string",
-                    "store": "yes",
-                    "index": "not_analyzed"
-                },
-                "create_date": {
-                    "type": "date",
-                    "store": "yes",
-                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                },
-                "update_date": {
-                    "type": "date",
-                    "store": "yes",
-                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                }
-            }
-        }
-    }
+	"feed": {
+	    "properties": {
+	        "url": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "not_analyzed"
+	        },
+	        "id": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "not_analyzed"
+	        },
+	        "title": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "analyzed",
+	            "term_vector": "with_positions_offsets"
+	        },
+	        "site": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "analyzed",
+	            "term_vector": "with_positions_offsets"
+	        },
+	        "description": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "analyzed",
+	            "term_vector": "with_positions_offsets"
+	        },
+	        "weight": {
+	            "type": "integer",
+	            "store": "yes"
+	        },
+	        "is_full_text": {
+	            "type": "byte",
+	            "store": "yes"
+	        },
+	        "type": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "not_analyzed"
+	        },
+	        "lan": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "not_analyzed"
+	        },
+	        "tags": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "analyzed",
+	            "term_vector": "with_positions_offsets"
+	        },
+	        "categories": {
+	            "type": "nested",
+	            "properties": {
+	                "root": {
+	                    "type": "string",
+	                    "store": "yes",
+	                    "index": "not_analyzed"
+	                },
+	                "parent": {
+	                    "type": "string",
+	                    "store": "yes",
+	                    "index": "not_analyzed"
+	                },
+	                "level": {
+	                    "type": "short",
+	                    "store": "yes"
+	                }
+	            }
+	        },
+	        "users": {
+	            "type": "string",
+	            "store": "yes",
+	            "index": "not_analyzed"
+	        },
+	        "create_date": {
+	            "type": "date",
+	            "store": "yes",
+	            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+	        },
+	        "update_date": {
+	            "type": "date",
+	            "store": "yes",
+	            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+	        }
+	    }
+	}
 }
