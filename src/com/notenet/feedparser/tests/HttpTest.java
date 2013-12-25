@@ -18,6 +18,7 @@ public class HttpTest {
 	@BeforeClass
 	public static void beforeClass() {
 		httpClient = new FeedParserHttpClient(Constants.ES_HOST_HTTP);
+		
 	}
 	
 	@Test
@@ -51,7 +52,7 @@ public class HttpTest {
 	
 	@Test
 	public void getDocumentTest() throws ClientProtocolException, IOException {
-		String id = "http%3A%2F%2Fes.appleweblog.com%2Ffeed%2F";
+		String id = "http%3A%2F%2Fwww.ringolab.com%2Fnote%2Fdaiya%2Fatom.xml";
 		httpClient.getDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id);
 	}
 	

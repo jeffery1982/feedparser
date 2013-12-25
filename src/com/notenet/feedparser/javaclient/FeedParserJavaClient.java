@@ -3,10 +3,7 @@ package com.notenet.feedparser.javaclient;
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,52 +51,6 @@ public class FeedParserJavaClient {
 	public FeedParserJavaClient(String clusterName) {
 		this.node = nodeBuilder().clusterName(clusterName).node();
 		this.client = node.client();
-	}
-	
-	public static void main(String args[]) throws IOException {
-		// init node and client
-		
-		// prepare data
-		// FeedSourceHelper helper = new FeedSourceHelper();
-		// FeedSource[] feedSourceList = helper.getFeedSourceList();
-		// Create Index and set settings and mappings
-
-		// for (FeedSource feedSource : feedSourceList) {
-		// client.prepareIndex();
-		// }
-
-		// client.prepareIndex("feedindex", "feed", "1")
-		// .setSource(putJsonDocument("ElasticSearch: Java",
-		// "ElasticSeach provides Java API, thus it executes all operations " +
-		// "asynchronously by using client object..",
-		// new Date(),
-		// new String[]{"elasticsearch"},
-		// "test")).execute().actionGet();
-		//
-		// client.prepareIndex("kodcucom", "article", "2")
-		// .setSource(putJsonDocument("Java Web Application and ElasticSearch (Video)",
-		// "Today, here I am for exemplifying the usage of ElasticSearch which is an open source, distributed "
-		// +
-		// "and scalable full text search engine and a data analysis tool in a Java web application.",
-		// new Date(),
-		// new String[]{"elasticsearch"},
-		// "test")).execute().actionGet();
-		//
-		// getDocument(client, "kodcucom", "article", "1");
-		//
-		// updateDocument(client, "kodcucom", "article", "1", "title",
-		// "ElasticSearch: Java API");
-		// updateDocument(client, "kodcucom", "article", "1", "tags", new
-		// String[]{"bigdata"});
-		//
-		// getDocument(client, "kodcucom", "article", "1");
-		//
-		// searchDocument(client, "kodcucom", "article", "title",
-		// "ElasticSearch");
-		//
-		// deleteDocument(client, "kodcucom", "article", "1");
-
-		//node.close();
 	}
 	
 	public Client getClient() {

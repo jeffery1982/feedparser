@@ -1,5 +1,4 @@
 package com.notenet.feedparser.entity;
-import io.searchbox.annotations.JestId;
 
 import java.util.Date;
 
@@ -10,7 +9,7 @@ import java.util.Date;
  */
 public class FeedInfo {
 	private String title;
-	@JestId
+
 	private String id;
 	private String description;
 	private Date timestamp;

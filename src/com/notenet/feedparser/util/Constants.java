@@ -1,5 +1,10 @@
 package com.notenet.feedparser.util;
 
+/**
+ * Constants
+ * @author Jeffery
+ *
+ */
 public class Constants {
 	public static final String CLUSTER_NAME = "elasticsearch";
 	public static final String FEED_SOURCE_INDEX_NAME = "feed";
