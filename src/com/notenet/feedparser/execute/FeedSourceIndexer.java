@@ -13,11 +13,11 @@ public class FeedSourceIndexer {
 		client = new FeedParserHttpClient(host);
 	}
 	
-	public void executeIndex() throws Exception {
+	public void executeIndex(String filePath) throws Exception {
 		FeedSourceHelper feedSourceHelper = new FeedSourceHelper();
 		Gson gson = new Gson();
 		
-		FeedSource[] feedSourceList = feedSourceHelper.getFeedSourceList();
+		FeedSource[] feedSourceList = feedSourceHelper.getFeedSourceList(filePath);
 		for (FeedSource feedSource : feedSourceList) {
 			String id = feedSource.getId();
 			System.out.println("Start processing feed Source ID: " + id);

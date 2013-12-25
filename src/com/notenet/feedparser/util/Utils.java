@@ -40,9 +40,6 @@ public class Utils {
 			arr = objectMapper.readValue(new File(filePath),
 					FeedSource[].class);
 			System.out.println(arr.length);
-//			for (int i = 0; i < arr.length; i++) {
-//				System.out.println(arr[i]);
-//			}
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

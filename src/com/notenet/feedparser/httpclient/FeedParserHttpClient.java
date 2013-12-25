@@ -18,14 +18,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class FeedParserHttpClient {
 	private String host;
 	
-//	public static void main(String[] args) throws Exception {
-//		//HttpESHelper http = new HttpESHelper();
-//		//http.createIndex("feedindex");
-//		//http.putMapping("feedindex", "feed");
-//		//http.addIndex("feedindex", "feed", 1);
-//		//http.getIndex("feedindex", "feed", 1);
-//	}
-	
 	public FeedParserHttpClient(String host) {
 		this.host = host;
 	}

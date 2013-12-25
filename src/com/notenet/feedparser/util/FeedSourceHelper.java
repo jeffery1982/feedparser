@@ -40,10 +40,8 @@ public class FeedSourceHelper {
 		return originalCategoryList;
 	}
 	
-	
-	
-	public FeedSource[] getFeedSourceList() throws JsonParseException, IOException {
-		String filePath = "c:/testdata/feedsourcefile.txt";
+	public FeedSource[] getFeedSourceList(String filePath) throws JsonParseException, IOException {
+		//String filePath = "c:/testdata/feedsourcefile.txt";
 		String fileContent = FileUtils.readFileToString(new File(filePath), "UTF-8");
 		Gson gson = new Gson();
 		FeedSource[] feedSourceList = gson.fromJson(fileContent, FeedSource[].class);

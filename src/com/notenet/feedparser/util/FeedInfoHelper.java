@@ -1,4 +1,4 @@
-package com.notenet.feedparser.execute;
+package com.notenet.feedparser.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.notenet.feedparser.entity.FeedInfo;
 import com.notenet.feedparser.entity.FeedSource;
-import com.notenet.feedparser.util.DBHelper;
-import com.notenet.feedparser.util.Utils;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -37,32 +35,7 @@ import com.sun.syndication.io.XmlReader;
  * @author Jeffery
  *
  */
-public class FeedParser {
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		String feedListFilePath = "./testdata/tech-7-20131009.txt";
-		try {
-			FeedSource[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
-			for (FeedSource feed : feedList) {
-				System.out.println("Download url: " + feed.getUrl());
-				List<FeedInfo> feedInfoList = FeedParser.downloadFeedAndAnalyze(feed.getUrl());
-				if (feedInfoList != null) {
-					System.out.println("feedInfoList size: " + feedInfoList.size());
-				}
-				for (FeedInfo feedInfo : feedInfoList) {
-					String sql = "INSERT INTO feedinfo (title,description) VALUES (?,?)";
-			        String[] parameters = { feedInfo.getTitle(), feedInfo.getDescription() };
-			        DBHelper.executeUpdate(sql, parameters);
-				}
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-	}
-	
+public class FeedInfoHelper {
 	public void updateFeedSource(String feedListFilePath) throws JsonParseException, IOException {
 		FeedSource[] feedList = Utils.getFeedListByObjectType(feedListFilePath);
 	}
@@ -89,7 +62,7 @@ public class FeedParser {
         in.close();
 	}
 	
-	public static List<FeedInfo> downloadFeedAndAnalyze(String urlString) throws Exception {
+	public List<FeedInfo> downloadFeedAndAnalyze(String urlString) throws Exception {
 		List<FeedInfo> feedInfoList = new Vector<FeedInfo>();
 		URL url = new URL(urlString);
 		XmlReader reader = null;
@@ -127,7 +100,7 @@ public class FeedParser {
 		return feedInfoList;
 	}
 	
-	public static void executeFeedFromFile(String filePath) throws Exception {
+	public void executeFeedFromFile(String filePath) throws Exception {
 		File file = new File(filePath);
 		SyndFeed feed = new SyndFeedInput().build(file);
 		for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
