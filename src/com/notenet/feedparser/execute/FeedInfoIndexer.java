@@ -1,5 +1,6 @@
 package com.notenet.feedparser.execute;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -22,24 +23,29 @@ public class FeedInfoIndexer {
 		FeedSourceHelper feedSourceHelper = new FeedSourceHelper();
 		Gson gson = new Gson();
 		try {
-			FeedSource[] feedSourceList = feedSourceHelper.getFeedSourceList(feedSourceFilePath);
-			for (FeedSource feed : feedSourceList) {
-				System.out.println("Download feed from url: " + feed.getUrl());
-				List<FeedInfo> feedInfoList = helper.downloadFeedAndAnalyze(feed.getUrl());
+			FeedSource[] feedSourceList = feedSourceHelper
+					.getFeedSourceList(feedSourceFilePath);
+			for (FeedSource feedSource : feedSourceList) {
+				System.out.println("Download feed from url: "
+						+ feedSource.getUrl());
+				List<FeedInfo> feedInfoList = helper
+						.downloadFeedAndAnalyze(feedSource.getUrl());
 				if (feedInfoList != null) {
-					System.out.println("feedInfoList size: " + feedInfoList.size());
+					System.out.println("feedInfoList size: "
+							+ feedInfoList.size());
 				}
 				for (FeedInfo feedInfo : feedInfoList) {
-					//String sql = "INSERT INTO feedinfo (title,description) VALUES (?,?)";
-			        //String[] parameters = { feedInfo.getTitle(), feedInfo.getDescription() };
-			        //DBHelper.executeUpdate(sql, parameters);
 					String content = gson.toJson(feedInfo);
-					client.addDocument(Constants.FEED_INFO_INDEX_NAME, Constants.FEED_INFO_INDEX_TYPE, feedInfo.getId(), content);
+					client.addDocument(Constants.FEED_INFO_INDEX_NAME,
+							Constants.FEED_INFO_INDEX_TYPE,
+							URLEncoder.encode(feedInfo.getLink(), "UTF-8"),
+							content);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
+		System.out.println("Index feedinfo finished!");
 	}
 
 }

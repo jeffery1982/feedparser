@@ -62,15 +62,16 @@ public class FeedInfoHelper {
         in.close();
 	}
 	
-	public List<FeedInfo> downloadFeedAndAnalyze(String urlString) throws Exception {
+	public List<FeedInfo> downloadFeedAndAnalyze(String urlString) throws IOException {
 		List<FeedInfo> feedInfoList = new Vector<FeedInfo>();
-		URL url = new URL(urlString);
+		
 		XmlReader reader = null;
 		try {
+			URL url = new URL(urlString);
 			reader = new XmlReader(url);
 			SyndFeed feed = new SyndFeedInput().build(reader);
-			for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
-				SyndEntry entry = (SyndEntry) i.next();
+			for (Iterator<SyndEntry> i = feed.getEntries().iterator(); i.hasNext();) {
+				SyndEntry entry = i.next();
 				FeedInfo feedInfo = new FeedInfo();
 				if (entry.getTitle() != null) {
 					feedInfo.setTitle(entry.getTitle());
@@ -79,19 +80,21 @@ public class FeedInfoHelper {
 					feedInfo.setDescription(entry.getDescription().getValue());
 				}
 				if (entry.getAuthor()!=null) {
-					//TODO
+					feedInfo.setAuthor(entry.getAuthor());
 				}
 				if (entry.getLink()!=null) {
-					//TODO
+					feedInfo.setLink(entry.getLink());
 				}
 				if (entry.getPublishedDate()!=null) {
-					//TODO
+					feedInfo.setPublishedDate(entry.getPublishedDate());
 				}
 				if (entry.getUri()!=null) {
 					//TODO
 				}
 				feedInfoList.add(feedInfo);
 			} 
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (reader !=null) {
 				reader.close();
