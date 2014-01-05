@@ -23,6 +23,8 @@ public class FeedSource {
 	private List<String> tags;
 	private List<FeedCategory> categories;
 	private List<String> users;
+	private boolean isValid;
+	private String exceptionMessage;
 	
 	@JsonProperty("site")
 	public String getSite() {
@@ -146,5 +148,21 @@ public class FeedSource {
 
 	public void setWeight(String weight) {
 		this.weight = weight;
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
+	}
+
+	public String getExceptionMessage() {
+		return exceptionMessage;
+	}
+
+	public void setExceptionMessage(String exceptionMessage) {
+		this.exceptionMessage = exceptionMessage;
 	}
 }

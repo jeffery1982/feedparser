@@ -1,6 +1,8 @@
 package com.notenet.feedparser.util;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,5 +51,17 @@ public class Utils {
 		}
 		
 		return arr;
+	}
+	
+	public static boolean checkURLValid(String urlString) {
+		URLConnection connection;
+		try {
+			connection = new URL(urlString).openConnection();
+			connection.connect();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

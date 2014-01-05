@@ -19,20 +19,17 @@ public class FeedInfoIndexer {
 	}
 	
 	public void executeIndex(String feedSourceFilePath) {
-		FeedInfoHelper helper = new FeedInfoHelper();
+		FeedInfoHelper feedInfoHelper = new FeedInfoHelper();
 		FeedSourceHelper feedSourceHelper = new FeedSourceHelper();
 		Gson gson = new Gson();
 		try {
 			FeedSource[] feedSourceList = feedSourceHelper
 					.getFeedSourceList(feedSourceFilePath);
 			for (FeedSource feedSource : feedSourceList) {
-				System.out.println("Download feed from url: "
-						+ feedSource.getUrl());
-				List<FeedInfo> feedInfoList = helper
-						.downloadFeedAndAnalyze(feedSource.getUrl());
+				System.out.println("Download feed from url: " + feedSource.getUrl());
+				List<FeedInfo> feedInfoList = feedInfoHelper.downloadFeedAndAnalyze(feedSource.getUrl());
 				if (feedInfoList != null) {
-					System.out.println("feedInfoList size: "
-							+ feedInfoList.size());
+					System.out.println("feedInfoList size: " + feedInfoList.size());
 				}
 				for (FeedInfo feedInfo : feedInfoList) {
 					String content = gson.toJson(feedInfo);

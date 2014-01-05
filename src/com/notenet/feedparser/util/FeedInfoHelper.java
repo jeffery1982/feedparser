@@ -94,6 +94,7 @@ public class FeedInfoHelper {
 				feedInfoList.add(feedInfo);
 			} 
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		} finally {
 			if (reader !=null) {
