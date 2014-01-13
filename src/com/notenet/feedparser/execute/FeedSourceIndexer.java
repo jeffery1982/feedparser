@@ -1,7 +1,14 @@
 package com.notenet.feedparser.execute;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import org.apache.http.client.ClientProtocolException;
+
 import com.google.gson.Gson;
 import com.notenet.feedparser.entity.FeedSource;
+import com.notenet.feedparser.entity.FeedSourceIndexDocument;
 import com.notenet.feedparser.httpclient.FeedParserHttpClient;
 import com.notenet.feedparser.util.Constants;
 import com.notenet.feedparser.util.FeedSourceHelper;
@@ -41,7 +48,19 @@ public class FeedSourceIndexer {
 		}
 	}
 	
+	public FeedSource getFeedSourceFromIndex(String id) throws ClientProtocolException, UnsupportedEncodingException, IOException {
+		String document = this.client.getDocument(
+				Constants.FEED_SOURCE_INDEX_NAME,
+				Constants.FEED_SOURCE_INDEX_TYPE,
+				URLEncoder.encode(id, "UTF-8"));
+		Gson gson = new Gson();
+		FeedSource feedSource = gson.fromJson(document, FeedSourceIndexDocument.class).get_source();
+		return feedSource;
+	}
 	
-	
-	
+	public void setFeedSourceToIndex(FeedSource feedSource) throws UnsupportedEncodingException, IOException {
+		Gson gson = new Gson();
+		String feedSourceJsonString = gson.toJson(feedSource);
+		this.client.addDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, feedSource.getId(), feedSourceJsonString);
+	}
 }

@@ -8,17 +8,17 @@ import com.notenet.feedparser.execute.FeedSourceIndexer;
 import com.notenet.feedparser.util.Constants;
 
 public class FeedInfoIndexerTest {
-	public static FeedInfoIndexer indexer;
+	public static FeedInfoIndexer feedInfoIndexer;
 	
 	@BeforeClass
 	public static void beforeClass() {
-		indexer = new FeedInfoIndexer(Constants.ES_HOST_HTTP);
+		feedInfoIndexer = new FeedInfoIndexer(Constants.ES_HOST_HTTP);
 	}
 	
 	@Test
 	public void executeIndexTest() throws Exception {
 		//String testFeedSourceFilePath = "testdata/sampledocument.txt";
 		String testFeedSourceFilePath = "c:/testdata/feedsourcefile.txt";
-		indexer.executeIndex(testFeedSourceFilePath);
+		feedInfoIndexer.executeIndex(testFeedSourceFilePath);
 	}
 }

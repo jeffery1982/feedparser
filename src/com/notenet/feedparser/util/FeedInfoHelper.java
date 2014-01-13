@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.notenet.feedparser.entity.FeedInfo;
 import com.notenet.feedparser.entity.FeedSource;
+import com.notenet.feedparser.execute.FeedSourceIndexer;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -66,8 +67,8 @@ public class FeedInfoHelper {
 		List<FeedInfo> feedInfoList = new Vector<FeedInfo>();
 		
 		XmlReader reader = null;
+		URL url = new URL(urlString);
 		try {
-			URL url = new URL(urlString);
 			reader = new XmlReader(url);
 			SyndFeed feed = new SyndFeedInput().build(reader);
 			for (Iterator<SyndEntry> i = feed.getEntries().iterator(); i.hasNext();) {
@@ -94,7 +95,11 @@ public class FeedInfoHelper {
 				feedInfoList.add(feedInfo);
 			} 
 		} catch (Exception e) {
-			
+			// Record the feedSource index
+			FeedSourceIndexer indexer = new FeedSourceIndexer(Constants.ES_HOST_HTTP);
+			FeedSource feedSource = indexer.getFeedSourceFromIndex(url.toString());
+			feedSource.setExceptionMessage(e.toString());
+			indexer.setFeedSourceToIndex(feedSource);
 			e.printStackTrace();
 		} finally {
 			if (reader !=null) {

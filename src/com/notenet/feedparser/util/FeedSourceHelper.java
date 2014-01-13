@@ -47,4 +47,5 @@ public class FeedSourceHelper {
 		FeedSource[] feedSourceList = gson.fromJson(fileContent, FeedSource[].class);
 		return feedSourceList;
 	}
+	
 }

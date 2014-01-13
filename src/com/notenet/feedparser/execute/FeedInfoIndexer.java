@@ -1,7 +1,11 @@
 package com.notenet.feedparser.execute;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.google.gson.Gson;
 import com.notenet.feedparser.entity.FeedInfo;
@@ -25,6 +29,7 @@ public class FeedInfoIndexer {
 		try {
 			FeedSource[] feedSourceList = feedSourceHelper
 					.getFeedSourceList(feedSourceFilePath);
+			// Iterate all the feed source list
 			for (FeedSource feedSource : feedSourceList) {
 				System.out.println("Download feed from url: " + feedSource.getUrl());
 				List<FeedInfo> feedInfoList = feedInfoHelper.downloadFeedAndAnalyze(feedSource.getUrl());
@@ -44,5 +49,4 @@ public class FeedInfoIndexer {
 		}
 		System.out.println("Index feedinfo finished!");
 	}
-
 }
