@@ -28,20 +28,20 @@ public class FeedSourceIndexer {
 		FeedSource[] feedSourceList = feedSourceHelper.getFeedSourceList(filePath);
 		for (FeedSource feedSource : feedSourceList) {
 			String id = feedSource.getId();
-			feedSource.setValid(Utils.checkURLValid(feedSource.getUrl()));
 			System.out.println("Start processing feed Source ID: " + id);
-			String indexContent = client.getDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id);
-			if (indexContent.contains("\"exists\":true")) {
+			FeedSourceIndexDocument feedSourceIndexDocument = this.getFeedSourceIndexDocument(id);
+			if (feedSourceIndexDocument.getExists().equals("true")) {
 				System.out.println("Feed: " + id + " exists");
 				// Merge logic here
-				System.out.println(indexContent);
-				String indexSource = client.getDocumentSource(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id);
-				FeedSource feedSourceFromES = gson.fromJson(indexSource, FeedSource.class);
+				System.out.println(gson.toJson(feedSourceIndexDocument));
+				FeedSource feedSourceFromES = feedSourceIndexDocument.get_source();
 				feedSourceFromES.setTags(feedSourceHelper.mergeTags(feedSourceFromES.getTags(), feedSource.getTags()));
 				feedSourceFromES.setCategories(feedSourceHelper.mergeCategories(feedSourceFromES.getCategories(), feedSource.getCategories()));
+				feedSourceFromES.setValid(Utils.checkURLValid(feedSourceFromES.getUrl()));
 				String content = gson.toJson(feedSourceFromES);
 				client.addDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id, content);
 			} else {
+				feedSource.setValid(Utils.checkURLValid(feedSource.getUrl()));
 				String content = gson.toJson(feedSource);
 				client.addDocument(Constants.FEED_SOURCE_INDEX_NAME, Constants.FEED_SOURCE_INDEX_TYPE, id, content);
 			}
@@ -49,13 +49,18 @@ public class FeedSourceIndexer {
 	}
 	
 	public FeedSource getFeedSourceFromIndex(String id) throws ClientProtocolException, UnsupportedEncodingException, IOException {
+		FeedSource feedSource = this.getFeedSourceIndexDocument(id).get_source();
+		return feedSource;
+	}
+	
+	public FeedSourceIndexDocument getFeedSourceIndexDocument(String id) throws ClientProtocolException, UnsupportedEncodingException, IOException {
 		String document = this.client.getDocument(
 				Constants.FEED_SOURCE_INDEX_NAME,
 				Constants.FEED_SOURCE_INDEX_TYPE,
 				URLEncoder.encode(id, "UTF-8"));
 		Gson gson = new Gson();
-		FeedSource feedSource = gson.fromJson(document, FeedSourceIndexDocument.class).get_source();
-		return feedSource;
+		FeedSourceIndexDocument feedSourceIndexDocument = gson.fromJson(document, FeedSourceIndexDocument.class);
+		return feedSourceIndexDocument;
 	}
 	
 	public void setFeedSourceToIndex(FeedSource feedSource) throws UnsupportedEncodingException, IOException {

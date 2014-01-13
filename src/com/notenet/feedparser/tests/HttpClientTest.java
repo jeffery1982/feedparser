@@ -12,13 +12,12 @@ import org.junit.Test;
 import com.notenet.feedparser.httpclient.FeedParserHttpClient;
 import com.notenet.feedparser.util.Constants;
 
-public class HttpTest {
+public class HttpClientTest {
 	public static FeedParserHttpClient httpClient;
 	
 	@BeforeClass
 	public static void beforeClass() {
 		httpClient = new FeedParserHttpClient(Constants.ES_HOST_HTTP);
-		
 	}
 	
 	@Test

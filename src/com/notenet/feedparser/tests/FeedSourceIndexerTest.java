@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.notenet.feedparser.execute.FeedSourceIndexer;
 import com.notenet.feedparser.util.Constants;
 
-public class HttpIndexerTest {
+public class FeedSourceIndexerTest {
 	public static FeedSourceIndexer feedSourceIndexer;
 	
 	@BeforeClass
